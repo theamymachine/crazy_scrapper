@@ -18,7 +18,7 @@ def crypto_price(page)
  return crypto_price_array
 end 
 
-def proper_format (hash)
+def final_table (hash)
   a = []
   hash.each{|key, val|
   h = Hash.new
@@ -32,7 +32,7 @@ page_ref = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))
 
 crypto_hash_table = Hash[crypto_symbols(page_ref).zip(crypto_price(page_ref))]
 
-table = proper_format(crypto_hash_table)
+table = final_table(crypto_hash_table)
 
 print table
 

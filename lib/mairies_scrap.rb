@@ -1,27 +1,46 @@
+require 'pry'
 require 'nokogiri'
 require 'open-uri'
-require 'pry'
-
-#Scrapping information from page to arrays
-#def scrapping_page
-def get_townhall_email
-page = Nokogiri::HTML(open("https://www.annuaire-des-mairies.com/95/avernes.html"))
-list_emails = []
-list_emails << page.xpath("//section[2]/div/table/tbody/tr[4]/td[2]/text()")
-end
-
-puts get_townhall_email
-
-#/html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]
-#get_townhall_urls
-
+#Scrapping townhall url to an array
+def get_townhall_urls
 page = Nokogiri::HTML(open("https://www.annuaire-des-mairies.com/val-d-oise.html"))
-
-def get_townhall_url
-  list_url = (page.xpath("//table//td/p/a[@class='lientxt']/@href"))
-  list_url_array = []
-  list_url.each{ |i| list_url_array << i.text}
-  return list_url_array
+list_url = (page.xpath("//table//td/p/a[@class='lientxt']/@href"))
+list_url_array = []
+list_url.each {|i| list_url_array << i.text}
+list_url_array.map{|url| url[0]="https://www.annuaire-des-mairies.com"}
+return list_url_array
+end
+#Scrapping email from page
+def get_townhall_email(list_url_array)
+emails_list = []
+list_url_array.each {|generate| page = Nokogiri::HTML(open(generate))
+emails_list << page.xpath("//section[2]/div/table/tbody/tr[4]/td[2]/text()").text}
+return emails_list
+end
+#Scrapping city name from page
+def get_city_name(list_url_array)
+  city_name_list = []
+  list_url_array.each {|generate| page = Nokogiri::HTML(open(generate))
+  city_name_list << page.xpath("//div/main/section[1]/div/div/div/h1/text()").text}
+  return city_name_list
+end
+def get_city_name(list_url_array)
+  city_name_list = []
+  list_url_array.each {|generate| page = Nokogiri::HTML(open(generate))
+  city_name_list << page.xpath("//div/main/section[1]/div/div/div/h1/text()").text}
+  return city_name_list
 end
 
-get_townhall_url(page)
+def final_table (hash)
+  a = []
+  hash.each{|key, val|
+  h = Hash.new
+  h[key] = val
+  a.push(h)
+  }
+  return a
+end
+
+table = final_table(get_city_name, get_townhall_email)
+
+print table
