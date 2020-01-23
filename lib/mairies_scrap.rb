@@ -24,13 +24,14 @@ def get_city_name(list_url_array)
   city_name_list << page.xpath("//div/main/section[1]/div/div/div/h1/text()").text}
   return city_name_list
 end
+#city names from page 
 def get_city_name(list_url_array)
   city_name_list = []
   list_url_array.each {|generate| page = Nokogiri::HTML(open(generate))
   city_name_list << page.xpath("//div/main/section[1]/div/div/div/h1/text()").text}
   return city_name_list
 end
-
+#final array with hashes inside 
 def final_table (hash)
   a = []
   hash.each{|key, val|
